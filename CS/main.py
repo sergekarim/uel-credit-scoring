@@ -84,6 +84,19 @@ for i, grade in enumerate(grades):
 
 df = pd.DataFrame(data)
 
+# add aggregate features:
+
+# Compliance Scores (declaration ratios)
+df["Compliance_Sales"] = df[[f"Decl_Sales_M{i+1}" for i in range(12)]].sum(axis=1) / df[[f"Sales_M{i+1}" for i in range(12)]].sum(axis=1)
+df["Compliance_Purchases"] = df[[f"Decl_Purchases_M{i+1}" for i in range(12)]].sum(axis=1) / df[[f"Purchases_M{i+1}" for i in range(12)]].sum(axis=1)
+
+# Stability Scores (volatility)
+df["Sales_Stability"] = df[[f"Sales_M{i+1}" for i in range(12)]].std(axis=1) / df[[f"Sales_M{i+1}" for i in range(12)]].mean(axis=1)
+df["Purchases_Stability"] = df[[f"Purchases_M{i+1}" for i in range(12)]].std(axis=1) / df[[f"Purchases_M{i+1}" for i in range(12)]].mean(axis=1)
+
+# Purchase-to-Sales Ratio
+df["Purchase_to_Sales_Ratio"] = df[[f"Purchases_M{i+1}" for i in range(12)]].sum(axis=1) / df[[f"Sales_M{i+1}" for i in range(12)]].sum(axis=1)
+
 # Save to CSV (optional)
 df.to_csv("credit_data.csv", index=False)
 
@@ -118,7 +131,6 @@ print("\nClassification Report:\n", classification_report(
     y_test, y_pred,
     labels=label_encoder.transform(label_encoder.classes_),
     target_names=label_encoder.classes_))
-# print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=label_encoder.classes_))
 
 # Save model and label encoder for future use
 joblib.dump((model, label_encoder), "credit_scoring_model.pkl")
@@ -148,14 +160,12 @@ plt.title("Distribution of Credit Grades")
 plt.show()
 
 # --- Step 5: Pairplot of Top Features ---
-
 top_features = feat_imp_df.head(5)["Feature"].tolist() + ["CreditGrade"]
 sns.pairplot(df[top_features], hue="CreditGrade", palette="Set2")
 plt.suptitle("Pairplot of Top Features by Credit Grade", y=1.02)
 plt.show()
 
 # --- Step 6: Example Prediction for New Client ---
-
 new_client = X_test.iloc[0:1]
 pred_grade = label_encoder.inverse_transform(model.predict(new_client))[0]
 print("Predicted Grade for sample client:", pred_grade)
