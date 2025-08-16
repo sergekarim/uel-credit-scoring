@@ -13,6 +13,8 @@ import joblib
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_auc_score
 
+from feature_engineering import add_features
+
 
 
 # --- Step 1: Data Generation ---
@@ -76,7 +78,6 @@ def generate_client_data(client_id, grade_target):
         "CreditGrade": grade
     }
 
-
 # Generate data 500 record per category
 grades = ["A", "B", "C", "D"]
 records_per_grade = 500  # 2000 total = 500 per grade
@@ -90,17 +91,7 @@ for i, grade in enumerate(grades):
 df = pd.DataFrame(data)
 
 # add aggregate features:
-
-# Compliance Scores (declaration ratios)
-df["Compliance_Sales"] = df[[f"Decl_Sales_M{i+1}" for i in range(12)]].sum(axis=1) / df[[f"Sales_M{i+1}" for i in range(12)]].sum(axis=1)
-df["Compliance_Purchases"] = df[[f"Decl_Purchases_M{i+1}" for i in range(12)]].sum(axis=1) / df[[f"Purchases_M{i+1}" for i in range(12)]].sum(axis=1)
-
-# Stability Scores (volatility)
-df["Sales_Stability"] = df[[f"Sales_M{i+1}" for i in range(12)]].std(axis=1) / df[[f"Sales_M{i+1}" for i in range(12)]].mean(axis=1)
-df["Purchases_Stability"] = df[[f"Purchases_M{i+1}" for i in range(12)]].std(axis=1) / df[[f"Purchases_M{i+1}" for i in range(12)]].mean(axis=1)
-
-# Purchase-to-Sales Ratio
-df["Purchase_to_Sales_Ratio"] = df[[f"Purchases_M{i+1}" for i in range(12)]].sum(axis=1) / df[[f"Sales_M{i+1}" for i in range(12)]].sum(axis=1)
+df = add_features(df)
 
 # Save to CSV (optional)
 df.to_csv("results/data/credit_data.csv", index=False)
@@ -141,7 +132,7 @@ cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 random_search = RandomizedSearchCV(
     RandomForestClassifier(random_state=42, n_jobs=-1),
     param_distributions=param_dist,
-    n_iter=30,               # test only 30 random combos instead of 216
+    n_iter=10,               # test only 30 random combos instead of 216
     cv=cv,
     scoring="f1_macro",      # optimize across all grades equally
     random_state=42,
