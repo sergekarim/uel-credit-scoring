@@ -4,13 +4,13 @@ import joblib
 import numpy as np
 
 from prediction_reasons import generate_reasons
-from feature_engineering import calculate_derived_features
+from features_engineering import calculate_derived_features
 
 app = Flask(__name__)
 
 # Load your saved models and label encoder at startup
 try:
-    model, label_encoder = joblib.load("results/models/credit_model.pkl")
+    model, label_encoder = joblib.load("results/models/credit_model-new.pkl")
     print("Model loaded successfully")
 except Exception as e:
     print(f"Error loading models: {e}")

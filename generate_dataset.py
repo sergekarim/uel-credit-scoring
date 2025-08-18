@@ -1,6 +1,6 @@
 import pandas as pd
 # --- Step 1: Data Generation ---
-from feature_engineering import add_features
+from features_engineering import add_features
 
 def generate_client_data(client_id, grade_target):
     import numpy as np
@@ -73,8 +73,5 @@ for i, grade in enumerate(grades):
 
 df = pd.DataFrame(data)
 
-# add aggregate features:
-df = add_features(df)
-
 # Save to CSV (optional)
-df.to_csv("results/data/credit_data-new.csv", index=False)
+df.to_csv("dataset/credit_data-new.csv", index=False)
