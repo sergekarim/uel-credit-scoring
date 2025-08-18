@@ -22,37 +22,6 @@ def generate_prediction_reasons(derived_features, predicted_grade, confidence):
     reasons = generate_reasons(derived_features, predicted_grade, confidence)
     return reasons
 
-    """Calculate derived features from the raw monthly data for a single client"""
-    # Extract monthly data
-    sales_values = [client_data[f"Sales_M{i + 1}"] for i in range(12)]
-    purchases_values = [client_data[f"Purchases_M{i + 1}"] for i in range(12)]
-    decl_sales_values = [client_data[f"Decl_Sales_M{i + 1}"] for i in range(12)]
-    decl_purchases_values = [client_data[f"Decl_Purchases_M{i + 1}"] for i in range(12)]
-
-    # Calculate derived features
-    sales_sum = sum(sales_values)
-    purchases_sum = sum(purchases_values)
-    decl_sales_sum = sum(decl_sales_values)
-    decl_purchases_sum = sum(decl_purchases_values)
-
-    derived_features = {}
-
-    # Compliance ratios (avoid division by zero)
-    derived_features["Compliance_Sales"] = decl_sales_sum / sales_sum if sales_sum != 0 else 0
-    derived_features["Compliance_Purchases"] = decl_purchases_sum / purchases_sum if purchases_sum != 0 else 0
-
-    # Stability (coefficient of variation)
-    sales_mean = np.mean(sales_values)
-    purchases_mean = np.mean(purchases_values)
-
-    derived_features["Sales_Stability"] = np.std(sales_values) / sales_mean if sales_mean != 0 else 0
-    derived_features["Purchases_Stability"] = np.std(purchases_values) / purchases_mean if purchases_mean != 0 else 0
-
-    # Purchase to sales ratio
-    derived_features["Purchase_to_Sales_Ratio"] = purchases_sum / sales_sum if sales_sum != 0 else 0
-
-    return derived_features
-
 
 @app.route('/predict', methods=['POST'])
 def predict_credit_grade():
@@ -180,4 +149,4 @@ if __name__ == '__main__':
     print("  GET /health - Health check")
     print("  GET /models-info - Model information")
 
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
