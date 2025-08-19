@@ -1,10 +1,9 @@
+# generate_dataset.py
 import pandas as pd
-# --- Step 1: Data Generation ---
-from features_engineering import add_features
 
 def generate_client_data(client_id, grade_target):
     import numpy as np
-    np.random.seed(client_id)  # reproducible per client
+    np.random.seed(client_id)
 
     # Generate data based on initial target grade
     if grade_target == "A":
@@ -75,3 +74,8 @@ df = pd.DataFrame(data)
 
 # Save to CSV (optional)
 df.to_csv("dataset/credit_data-new.csv", index=False)
+
+print("\nClass Distribution (CreditGrade):")
+print(df["CreditGrade"].value_counts())
+print("\nSample Data:")
+print(df.head())

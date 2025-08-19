@@ -1,6 +1,5 @@
-# credit_scoring_pipeline.py
+# pipeline.py
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -13,7 +12,7 @@ from sklearn.metrics import (
     accuracy_score, classification_report, confusion_matrix, roc_auc_score
 )
 
-from features_engineering import add_features
+from functions.features_engineering import add_features
 
 
 # -------------------------------------------------------------------
