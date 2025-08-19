@@ -5,28 +5,37 @@ def generate_client_data(client_id, grade_target):
     import numpy as np
     np.random.seed(client_id)
 
+    # Base business size (independent of credit grade)
+    business_size = np.random.choice(['micro', 'small', 'medium'], p=[0.7, 0.25, 0.05])
+    if business_size == 'micro':
+        base_sales = np.random.uniform(50000, 500000)  # 50K-500K RWF monthly
+    elif business_size == 'small':
+        base_sales = np.random.uniform(300000, 2000000)  # 300K-2M RWF monthly
+    else:  # medium
+        base_sales = np.random.uniform(1500000, 4200000)  # 1.5M-4.2M RWF monthly
+
     # Generate data based on initial target grade
     if grade_target == "A":
-        base_sales = np.random.uniform(4000, 6000)
-        sales = base_sales + np.random.normal(0, base_sales * 0.05, 12)
-        purchases = np.random.uniform(3000, 5000, 12)
+        # base_sales = np.random.uniform(4000, 6000)
+        sales = base_sales + np.random.normal(0, base_sales * 0.08, 12)
+        purchases = sales * np.random.uniform(0.60, 0.75, 12)  # Good profit margins
         declared_sales = sales * np.random.uniform(0.96, 1.0, 12)
         declared_purchases = purchases * np.random.uniform(0.85, 1.0, 12)
     elif grade_target == "B":
-        base_sales = np.random.uniform(3000, 7000)
+        # base_sales = np.random.uniform(3000, 7000)
         sales = base_sales + np.random.normal(0, base_sales * 0.15, 12)
-        purchases = np.random.uniform(2000, 6000, 12)
+        purchases = sales * np.random.uniform(0.65, 0.80, 12)
         declared_sales = sales * np.random.uniform(0.91, 0.95, 12)
         declared_purchases = purchases * np.random.uniform(0.85, 1.0, 12)
     elif grade_target == "C":
-        base_sales = np.random.uniform(2000, 8000)
-        sales = base_sales + np.random.normal(0, base_sales * 0.3, 12)
-        purchases = np.random.uniform(1500, 7000, 12)
+        # base_sales = np.random.uniform(2000, 8000)
+        sales = base_sales + np.random.normal(0, base_sales * 0.25, 12)
+        purchases = sales * np.random.uniform(0.70, 0.85, 12)
         declared_sales = sales * np.random.uniform(0.86, 0.9, 12)
         declared_purchases = purchases * np.random.uniform(0.85, 1.0, 12)
     else:  # D
-        sales = np.random.uniform(1000, 10000, 12)
-        purchases = np.random.uniform(800, 9000, 12)
+        sales = base_sales + np.random.normal(0, base_sales * 0.4, 12)
+        purchases = sales * np.random.uniform(0.75, 1.0, 12)
         declared_sales = sales * np.random.uniform(0.7, 0.85, 12)
         declared_purchases = purchases * np.random.uniform(0.7, 0.85, 12)
 
@@ -53,10 +62,11 @@ def generate_client_data(client_id, grade_target):
 
     return {
         "ClientID": f"C{client_id:03d}",
-        **{f"Sales_M{i + 1}": sales[i] for i in range(12)},
-        **{f"Purchases_M{i + 1}": purchases[i] for i in range(12)},
-        **{f"Decl_Sales_M{i + 1}": declared_sales[i] for i in range(12)},
-        **{f"Decl_Purchases_M{i + 1}": declared_purchases[i] for i in range(12)},
+        "Business_Size": business_size,
+        **{f"Sales_M{i + 1}": round(sales[i]) for i in range(12)},
+        **{f"Purchases_M{i + 1}": round(purchases[i]) for i in range(12)},
+        **{f"Decl_Sales_M{i + 1}": round(declared_sales[i]) for i in range(12)},
+        **{f"Decl_Purchases_M{i + 1}": round(declared_purchases[i]) for i in range(12)},
         "CreditGrade": grade
     }
 
@@ -77,5 +87,3 @@ df.to_csv("dataset/credit_data-new.csv", index=False)
 
 print("\nClass Distribution (CreditGrade):")
 print(df["CreditGrade"].value_counts())
-print("\nSample Data:")
-print(df.head())

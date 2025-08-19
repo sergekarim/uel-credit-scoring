@@ -34,8 +34,15 @@ def explore_data(df):
     """Show dataset distribution and summary"""
     print("\nClass Distribution (CreditGrade):")
     print(df["CreditGrade"].value_counts())
-    print("\nSample Data:")
-    print(df.head())
+
+    print("\nBusiness Size Distribution:")
+    print(df["Business_Size"].value_counts())
+
+    print("\nSample Data (First 5 rows):")
+    display_cols = ['ClientID', 'Business_Size', 'Sales_M1', 'Purchases_M1',
+                    'Sales_M2', 'Purchases_M2', 'CreditGrade']
+    print(df[display_cols].head())
+
     print("\n--- Dataset Overview ---")
     print(df.info())
     print("\n--- Summary Statistics ---")
@@ -50,7 +57,7 @@ def preprocess_data(df):
     df.to_csv("results/data/preprocessed_data-new.csv", index=False)
 
     # Step 2: Split features and target
-    X = df.drop(columns=["ClientID", "CreditGrade"])
+    X = df.drop(columns=["ClientID","Business_Size", "CreditGrade"])
     y = df["CreditGrade"]
 
     # Step 3: Encode target labels
@@ -176,6 +183,7 @@ def example_prediction(model, X_test, label_encoder):
 # Run the pipeline
 # -------------------------------------------------------------------
 if __name__ == "__main__":
+    # file_path = "dataset/credit_data-new.csv"
     file_path = "dataset/credit_data-new.csv"
     df = load_data(file_path)
 
@@ -187,8 +195,8 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test, label_encoder,df = preprocess_data(df)
     model = train_model(X_train, y_train)
-    evaluate_model(model, X_test, y_test, label_encoder)
     save_model(model, label_encoder)
+    evaluate_model(model, X_test, y_test, label_encoder)
 
     feat_imp_df = feature_importance(model, X_train)
     visualize_top_features(feat_imp_df)
