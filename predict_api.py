@@ -7,11 +7,11 @@ import numpy as np
 from functions.prediction_reasons import generate_reasons
 from functions.features_engineering import calculate_derived_features
 
+from flask import Flask, request, jsonify
 app = Flask(__name__)
-
 # Load your saved models and label encoder at startup
 try:
-    model, label_encoder = joblib.load("results/models/credit_model-new.pkl")
+    model, label_encoder = joblib.load("results/models/credit_model.pkl")
     print("Model loaded successfully")
 except Exception as e:
     print(f"Error loading models: {e}")
@@ -26,13 +26,9 @@ def generate_prediction_reasons(derived_features, predicted_grade, confidence):
 
 @app.route('/predict', methods=['POST'])
 def predict_credit_grade():
-    """
-    Endpoint to predict credit grade for a single client
-    Expects JSON payload with client data (no array wrapper)
-    """
     if not model or not label_encoder:
         return jsonify({
-            'error': 'Model not loaded. Please ensure credit_scoring_model.pkl exists.'
+            'error': 'Model not loaded. Please ensure credit_model.pkl exists.'
         }), 500
 
     try:

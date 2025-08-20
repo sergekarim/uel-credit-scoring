@@ -4,12 +4,12 @@ def add_features(df_new):
     """
     Enhance dataset with financial behavior features for better credit grade prediction.
     """
-    # --- 1. Compliance Scores ---
+    # --- 1. Sales Compliance Scores ---
     df_new["Compliance_Sales"] = np.minimum(
         df_new[[f"Decl_Sales_M{i + 1}" for i in range(12)]].sum(axis=1) /
         df_new[[f"Sales_M{i + 1}" for i in range(12)]].sum(axis=1), 1.0
     )
-    # --- 2.
+    # --- 2. Purchase Compliance Scores ---
     df_new["Compliance_Purchases"] = np.minimum(
         df_new[[f"Decl_Purchases_M{i + 1}" for i in range(12)]].sum(axis=1) /
         df_new[[f"Purchases_M{i + 1}" for i in range(12)]].sum(axis=1), 1.0

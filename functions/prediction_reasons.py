@@ -3,7 +3,6 @@ import pandas as pd
 def generate_reasons(derived_features, predicted_grade, confidence):
     reasons = []
 
-
     # # Add confidence-based reasoning
     if confidence >= 0.90:
         reasons.append("High models confidence in this prediction")
