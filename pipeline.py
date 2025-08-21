@@ -90,7 +90,7 @@ def preprocess_data(df):
     """Prepare features, labels, and split dataset"""
     # Step 1: Add engineered features first
     df = add_features(df)
-    df.to_csv("results/data/preprocessed_data-new.csv", index=False)
+    df.to_csv("results/data/preprocessed_data.csv", index=False)
 
     # Step 2: Split features and target
     X = df.drop(columns=["ClientID","Business_Size", "CreditGrade"])
@@ -267,8 +267,7 @@ def example_prediction(model, X_test, label_encoder):
 # Run the pipeline
 # -------------------------------------------------------------------
 if __name__ == "__main__":
-    # file_path = "dataset/credit_data-new.csv"
-    file_path = "dataset/credit_data-new.csv"
+    file_path = "dataset/credit_data.csv"
     df = load_validate_data(file_path)
 
     if df.empty:
