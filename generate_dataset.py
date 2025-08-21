@@ -83,7 +83,7 @@ for i, grade in enumerate(grades):
 df = pd.DataFrame(data)
 
 # Save to CSV (optional)
-df.to_csv("dataset/credit_data-new.csv", index=False)
+df.to_csv("dataset/credit_data.csv", index=False)
 
 print("\nClass Distribution (CreditGrade):")
 print(df["CreditGrade"].value_counts())
