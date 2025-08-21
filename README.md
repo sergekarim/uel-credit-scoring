@@ -87,27 +87,80 @@ Launches Flask API on `http://localhost:5001`
 Predicts credit grade for an SME
 ```json
 {
-  "Sales_M1": 358337,
-  "Sales_M2": 342030,
-  // ... (48 monthly features required)
-  "Decl_Purchases_M12": 156116
+  "Sales_M1": 2210021,
+  "Sales_M2": 2324655,
+  "Sales_M3": 2042578,
+  "Sales_M4": 2016137,
+  "Sales_M5": 1988575,
+  "Sales_M6": 2122090,
+  "Sales_M7": 1910253,
+  "Sales_M8": 1869832,
+  "Sales_M9": 2102360,
+  "Sales_M10": 2242886,
+  "Sales_M11": 1445835,
+  "Sales_M12": 2006116,
+  "Purchases_M1": 1617140,
+  "Purchases_M2": 1570614,
+  "Purchases_M3": 1399541,
+  "Purchases_M4": 1437158,
+  "Purchases_M5": 1348483,
+  "Purchases_M6": 1427488,
+  "Purchases_M7": 1476257,
+  "Purchases_M8": 1366686,
+  "Purchases_M9": 1428057,
+  "Purchases_M10": 1705800,
+  "Purchases_M11": 1108133,
+  "Purchases_M12": 1542488,
+  "Decl_Sales_M1": 2070790,
+  "Decl_Sales_M2": 2130643,
+  "Decl_Sales_M3": 1897679,
+  "Decl_Sales_M4": 1879269,
+  "Decl_Sales_M5": 1825721,
+  "Decl_Sales_M6": 1996050,
+  "Decl_Sales_M7": 1793297,
+  "Decl_Sales_M8": 1703588,
+  "Decl_Sales_M9": 1989334,
+  "Decl_Sales_M10": 2056878,
+  "Decl_Sales_M11": 1346879,
+  "Decl_Sales_M12": 1839028,
+  "Decl_Purchases_M1": 1483940,
+  "Decl_Purchases_M2": 1559948,
+  "Decl_Purchases_M3": 1192401,
+  "Decl_Purchases_M4": 1227617,
+  "Decl_Purchases_M5": 1265825,
+  "Decl_Purchases_M6": 1254036,
+  "Decl_Purchases_M7": 1385784,
+  "Decl_Purchases_M8": 1347852,
+  "Decl_Purchases_M9": 1286165,
+  "Decl_Purchases_M10": 1653959,
+  "Decl_Purchases_M11": 1069324,
+  "Decl_Purchases_M12": 1517520
 }
 ```
 
 **Response:**
 ```json
 {
-  "status": "success",
-  "predicted_grade": "A",
-  "confidence": 0.9905,
-  "derived_features": {
-    "Compliance_Sales": 0.9905,
-    "Sales_Stability": 0.0287
-  },
-  "reasons": [
-    "Excellent credit profile with minimal risk",
-    "Excellent sales compliance"
-  ]
+    "confidence": 0.8940638123484235,
+    "derived_features": {
+        "Compliance_Purchases": 0.9320929237091562,
+        "Compliance_Sales": 0.9278383258780879,
+        "Purchase_to_Sales_Ratio": 0.7177464849754162,
+        "Purchases_Stability": 0.10035635401240799,
+        "Sales_Stability": 0.10691603764421703
+    },
+    "predicted_grade": "B",
+    "reasons": [
+        "Good to moderate credit profile with manageable risk",
+        "Good models confidence in this prediction",
+        "Good sales compliance with minor discrepancies",
+        "Good purchase compliance with minor variance",
+        "Highly stable sales pattern",
+        "Consistent purchasing behavior",
+        "High purchase-to-sales ratio - potential operational issues",
+        "Low profitability - review cost structure"
+    ],
+    "status": "success"
 }
 ```
 
